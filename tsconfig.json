@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM"],
+    "types": ["node"],
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src", "examples", "test.ts"],
+  // The Firestore adapter has a `firebase` peer dependency; typecheck it after
+  // `npm install firebase`. Excluded here so the default `npm run typecheck`
+  // stays green without pulling in firebase.
+  "exclude": ["src/adapters/firestore.ts"]
+}
