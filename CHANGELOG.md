@@ -8,6 +8,29 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 _Nothing yet._
 
+## [0.2.0] - 2026-08-15
+
+Feedback from the first real integration (YummiSave).
+
+### Added
+
+- **`AdminFirestoreAdapter`** (`src/adapters/firestore-admin.ts`) — a server-side
+  Firestore adapter built on `firebase-admin`, for the Cloud Function / Node API
+  route where the engine is meant to run. Imported from its own path; `firebase-admin`
+  is an optional peer dependency.
+- **`mergeAwards(...awards)`** and **`GamificationEngine.emitMany(userId, events)`** —
+  first-class support for one user action that emits several events: `emitMany`
+  applies them in a single atomic write and returns one merged award; `mergeAwards`
+  combines awards you already have. Documented in SKILL.md and covered by tests.
+- **`references/ui-integration.md`** — front-end patterns (stat pill, rewards
+  modal, data-driven "how to earn" list, and the badge-metadata split).
+
+### Changed
+
+- `updateStreak` no longer takes the unused `_config` parameter (it was dead and
+  tripped `@typescript-eslint/no-unused-vars` for integrators). This is a minor
+  breaking change to that exported helper's signature; `engine.emit` is unaffected.
+
 ## [0.1.0] - 2026-08-15
 
 Initial release.
@@ -43,5 +66,6 @@ Initial release.
 - **Tests:** 48 behavior checks in `test.ts` (incl. concurrency and anti-spoof),
   wired into CI.
 
-[Unreleased]: https://github.com/kasperjunky/Gamification-Skill/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/kasperjunky/Gamification-Skill/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/kasperjunky/Gamification-Skill/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/kasperjunky/Gamification-Skill/releases/tag/v0.1.0

@@ -1,6 +1,7 @@
 export * from './types';
 export { GamificationEngine, applyEvent, initialState } from './engine';
 export { levelForXp, evalCondition, trackerProgress } from './rules';
+export { mergeAwards, emptyAward } from './awards';
 export { dayInTimezone, dayDifference, updateStreak } from './streak';
 export { validateConfig, type ConfigValidation } from './validate';
 

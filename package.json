@@ -1,6 +1,6 @@
 {
   "name": "gamification-engine",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Event-driven gamification engine — points, XP, levels, badges, streaks, and progress trackers. Framework- and database-agnostic behind a small storage adapter.",
   "type": "module",
   "license": "MIT",
@@ -26,10 +26,14 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "firebase": ">=9"
+    "firebase": ">=9",
+    "firebase-admin": ">=11"
   },
   "peerDependenciesMeta": {
     "firebase": {
+      "optional": true
+    },
+    "firebase-admin": {
       "optional": true
     }
   },

@@ -1,4 +1,4 @@
-import type { StreakState, StreakConfig } from './types';
+import type { StreakState } from './types';
 
 /**
  * Calendar day (YYYY-MM-DD) for a timestamp *in a specific timezone*.
@@ -37,8 +37,11 @@ export interface StreakResult {
  *  - gap, with enough freezes to bridge it -> +1, spend freezes
  *  - gap, otherwise   -> reset to 1
  * Out-of-order / stale events (today <= lastActiveDay) are ignored.
+ *
+ * Freeze *caps* (`streak.maxFreezes`) are enforced at grant time in the engine,
+ * not here — this function only spends existing freezes — so it needs no config.
  */
-export function updateStreak(streak: StreakState, today: string, _config: StreakConfig): StreakResult {
+export function updateStreak(streak: StreakState, today: string): StreakResult {
   if (streak.lastActiveDay === null) {
     return {
       streak: { ...streak, current: 1, longest: Math.max(1, streak.longest), lastActiveDay: today },

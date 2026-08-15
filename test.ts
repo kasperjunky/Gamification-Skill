@@ -2,6 +2,7 @@ import { GamificationEngine } from './src/engine';
 import { MemoryAdapter } from './src/adapters/memory';
 import { OptimisticAdapter, type OptimisticBackend } from './src/adapters/optimistic';
 import { validateConfig } from './src/validate';
+import { mergeAwards } from './src/awards';
 import type { GamificationConfig, GamificationState } from './src/types';
 import { config } from './examples/config.example';
 
@@ -264,6 +265,32 @@ async function main() {
     for (let i = 0; i < 5; i++) await engine.emit(uid, { type: 'buy_freeze', at: noonJerusalem('2026-06-03') });
     const st = await engine.getState(uid);
     check('freezes are capped at maxFreezes (<= 3)', st.streak.freezes <= 3);
+  }
+
+  // ---- 13. mergeAwards + emitMany (multiple events, one user action) -----
+  {
+    const engine = new GamificationEngine(config, new MemoryAdapter());
+    const uid = 'u13';
+    const merged = await engine.emitMany(uid, [
+      { type: 'item.created', subjectId: 'r1', eventId: 'a' },
+      { type: 'image.uploaded', subjectId: 'i1', eventId: 'b' },
+    ]);
+    // item.created: 25 + 5 = 30; image.uploaded: 25 + 3 = 28.
+    check('emitMany merges points across events (58)', merged.points === 58);
+    check('emitMany merges badges from both events', merged.badgesEarned.includes('first_steps') && merged.badgesEarned.includes('shutterbug'));
+    const state = await engine.getState(uid);
+    check('emitMany is one atomic write, version reflects both events (2)', state.version === 2);
+    check('emitMany applied both counters', state.counters.items_created === 1 && state.counters.images_uploaded === 1);
+
+    const m = mergeAwards(
+      { points: 5, xp: 5, badgesEarned: ['x'], trackerCompleted: [], levelUp: { from: 1, to: 2 } },
+      { points: 3, xp: 3, badgesEarned: ['y'], trackerCompleted: ['t'], levelUp: { from: 2, to: 4 }, freezesGranted: 1 },
+    );
+    check('mergeAwards sums points/xp', m.points === 8 && m.xp === 8);
+    check('mergeAwards concatenates badges + trackers', m.badgesEarned.join(',') === 'x,y' && m.trackerCompleted.join(',') === 't');
+    check('mergeAwards spans levelUp (1 -> 4)', m.levelUp?.from === 1 && m.levelUp?.to === 4);
+    check('mergeAwards sums freezes granted', m.freezesGranted === 1);
+    check('mergeAwards deduped only when all inputs deduped', mergeAwards({ points: 0, xp: 0, badgesEarned: [], trackerCompleted: [], deduped: true }, { points: 0, xp: 0, badgesEarned: [], trackerCompleted: [], deduped: true }).deduped === true);
   }
 
   console.log(`\n${passed} passed, ${failed} failed`);

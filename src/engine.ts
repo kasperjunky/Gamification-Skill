@@ -10,6 +10,7 @@ import type {
 import { evalCondition, levelForXp } from './rules';
 import { dayInTimezone, updateStreak } from './streak';
 import { validateConfig } from './validate';
+import { emptyAward, mergeAwards } from './awards';
 
 /** A fresh, empty state for a brand-new user. */
 export function initialState(schemaVersion = 1): GamificationState {
@@ -28,10 +29,6 @@ export function initialState(schemaVersion = 1): GamificationState {
     version: 0,
     schemaVersion,
   };
-}
-
-function emptyAward(): AppliedAward {
-  return { points: 0, xp: 0, badgesEarned: [], trackerCompleted: [] };
 }
 
 function ensureTracker(state: GamificationState, trackerId: string): TrackerState {
@@ -199,7 +196,7 @@ export function applyEvent(
   // 2. Streak, if this event is the configured activity trigger.
   if (config.streak && event.type === config.streak.on) {
     const today = dayInTimezone(at, config.streak.timezone);
-    const res = updateStreak(draft.streak, today, config.streak);
+    const res = updateStreak(draft.streak, today);
     draft.streak = res.streak;
     award.streak = { current: res.streak.current, changed: res.changed, usedFreeze: res.usedFreeze };
     if (res.changed) {
@@ -263,6 +260,30 @@ export class GamificationEngine {
       const base = current ?? this.fresh();
       const { state, award } = applyEvent(base, { ...event, at }, this.config, now);
       return { state, result: award };
+    });
+  }
+
+  /**
+   * Apply several events from a **single user action** in one atomic write, and
+   * return one merged award (for a single toast). Use this when an action maps to
+   * more than one event — e.g. a generic `recipe.created` plus a variant
+   * `recipe.created.url`. Events are applied in order to the evolving state.
+   *
+   * Give each event its own `eventId` if you use replay dedup — two events sharing
+   * an id would collapse into one.
+   */
+  async emitMany(userId: string, events: GamificationEvent[]): Promise<AppliedAward> {
+    const now = Date.now();
+    return this.store.update(userId, (current) => {
+      let state = current ?? this.fresh();
+      const awards: AppliedAward[] = [];
+      for (const event of events) {
+        const at = this.trustEventTime ? (event.at ?? now) : now;
+        const applied = applyEvent(state, { ...event, at }, this.config, now);
+        state = applied.state;
+        awards.push(applied.award);
+      }
+      return { state, result: mergeAwards(...awards) };
     });
   }
 

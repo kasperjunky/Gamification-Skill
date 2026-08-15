@@ -12,8 +12,8 @@
     "forceConsistentCasingInFileNames": true
   },
   "include": ["src", "examples", "test.ts"],
-  // The Firestore adapter has a `firebase` peer dependency; typecheck it after
-  // `npm install firebase`. Excluded here so the default `npm run typecheck`
-  // stays green without pulling in firebase.
-  "exclude": ["src/adapters/firestore.ts"]
+  // The Firestore adapters have `firebase` / `firebase-admin` peer dependencies;
+  // typecheck them after installing those. Excluded here so the default
+  // `npm run typecheck` stays green without pulling in either.
+  "exclude": ["src/adapters/firestore.ts", "src/adapters/firestore-admin.ts"]
 }

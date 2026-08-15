@@ -59,7 +59,8 @@ in the browser, and keep the gamification record server-writable only.
 | --- | --- | --- |
 | `MemoryAdapter` | `./src` | tests, local dev |
 | `OptimisticAdapter` | `./src` | any store with a conditional write (SQL, Mongo, Dynamo, Prisma, Supabase, REST) |
-| `FirestoreAdapter` | `./src/adapters/firestore` | React + Firebase (has a `firebase` peer dependency, so it's imported from its own path) |
+| `FirestoreAdapter` | `./src/adapters/firestore` | client-side Firebase (modular SDK; `firebase` peer dep) |
+| `AdminFirestoreAdapter` | `./src/adapters/firestore-admin` | **server-side** Firebase — Cloud Functions / Node (`firebase-admin` peer dep) |
 
 Bringing your own database is ~20 lines — see
 [references/writing-an-adapter.md](references/writing-an-adapter.md).
@@ -69,6 +70,7 @@ Bringing your own database is ~20 lines — see
 - [SKILL.md](SKILL.md) — the full skill guide (wiring, idempotency, streaks, security, ethics).
 - [references/config-schema.md](references/config-schema.md) — every config field.
 - [references/writing-an-adapter.md](references/writing-an-adapter.md) — put the engine on your database.
+- [references/ui-integration.md](references/ui-integration.md) — front-end patterns (stat pill, rewards modal, badge metadata).
 - [references/ethical-design.md](references/ethical-design.md) — dark-pattern checklist. **Read before shipping.**
 - [examples/config.example.ts](examples/config.example.ts) — a worked config covering all three feature areas.
 

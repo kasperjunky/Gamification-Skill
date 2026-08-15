@@ -19,9 +19,10 @@ description: >
 
 A small, tested, event-driven engine for points, XP, levels, badges, streaks,
 and progress trackers. The core has no framework or database dependency —
-persistence lives behind a two-method `StorageAdapter`. It ships with three
-adapters: `FirestoreAdapter` (React + Firebase), `OptimisticAdapter` (a generic
-base for any store with a conditional write — Postgres, MySQL, MongoDB, DynamoDB,
+persistence lives behind a two-method `StorageAdapter`. It ships with four
+adapters: `FirestoreAdapter` (client Firebase), `AdminFirestoreAdapter`
+(server-side Firebase via `firebase-admin`), `OptimisticAdapter` (a generic base
+for any store with a conditional write — Postgres, MySQL, MongoDB, DynamoDB,
 Prisma, Supabase, Redis, a REST API), and `MemoryAdapter` (tests/local dev).
 Bringing your own database is ~20 lines — see `references/writing-an-adapter.md`.
 
@@ -139,6 +140,22 @@ A repeat of the same `eventId` is a total no-op (`award.deduped === true`). Rece
 ids are remembered for `config.idempotencyTtlMs` (default 24h), so this ledger
 stays bounded — unlike a per-`{subjectId}` `once` key, which is permanent.
 
+**One action, several events.** Sometimes a single user action maps to more than
+one event — e.g. a generic `recipe.created` *plus* a variant `recipe.created.url`
+(rules match on `type` only; the core ignores `meta`). Use `emitMany` so they
+apply in **one atomic write** and return **one** merged award for a single toast:
+
+```ts
+const award = await engine.emitMany(uid, [
+  { type: 'recipe.created',     subjectId: id, eventId: `${reqId}:base` },
+  { type: 'recipe.created.url', subjectId: id, eventId: `${reqId}:url`  },
+]);
+```
+
+Give each event its **own** `eventId` (note the distinct suffixes) — two events
+sharing an id collapse into one under replay-dedup. If you must emit separately,
+combine the results yourself with `mergeAwards(...awards)`.
+
 ## Streaks — timezone and clock
 
 - A "day" is bucketed in the config's IANA `timezone` (e.g. `Asia/Jerusalem`),
@@ -159,7 +176,9 @@ Two rules hold on **every** database, not just Firestore:
 1. **Run `engine.emit` in trusted server code** (a Cloud Function, an API route, a
    background worker) — never in the browser. The gamification record must be
    writable *only* by that trusted code; if clients can write it directly, they
-   can mint points.
+   can mint points. On Firebase this means the **Admin SDK** on the server, so use
+   `AdminFirestoreAdapter` (from `./gamification-engine/src/adapters/firestore-admin`)
+   there — `FirestoreAdapter` is the client SDK, for read-only subscriptions.
 2. **The adapter's `update` must be atomic** so concurrent emits don't lose an
    award or double-grant a `once` bonus. `FirestoreAdapter` uses a transaction;
    `OptimisticAdapter` uses a version-guarded conditional write; `MemoryAdapter`
@@ -210,13 +229,16 @@ reducer-over-events pattern rather than bolting logic onto app code.
 - `src/engine.ts` — `applyEvent` (pure reducer) and the `GamificationEngine` class.
 - `src/rules.ts` — level curve, badge-condition evaluation, `trackerProgress`.
 - `src/validate.ts` — `validateConfig`: static config checks (errors + warnings).
+- `src/awards.ts` — `mergeAwards` / `emptyAward` for combining multiple emits.
 - `src/streak.ts` — timezone day-math and streak advance/reset.
 - `src/adapters/optimistic.ts` — generic adapter for any store with a conditional write (no deps).
-- `src/adapters/firestore.ts` — Firestore adapter (transactional). Peer dep: firebase v9+. Import from its own path, not the barrel.
+- `src/adapters/firestore.ts` — client Firestore adapter (transactional). Peer dep: firebase v9+. Import from its own path, not the barrel.
+- `src/adapters/firestore-admin.ts` — server-side Firestore adapter. Peer dep: firebase-admin. Import from its own path.
 - `src/adapters/memory.ts` — in-memory adapter for tests/local dev.
 - `src/index.ts` — barrel exports (core + dependency-free adapters).
 - `examples/config.example.ts` — worked config for the three feature areas.
 - `test.ts` — behavior spec / usage examples (run with `npx tsx test.ts`).
 - `references/writing-an-adapter.md` — how to put the engine on your own database.
+- `references/ui-integration.md` — front-end patterns (stat pill, rewards modal, badge metadata).
 - `references/config-schema.md` — full config reference.
 - `references/ethical-design.md` — dark-pattern checklist and principles.
