@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or usage help
+    url: https://github.com/kasperjunky/Gamification-Skill#documentation
+    about: Check the README and the references/ docs before opening an issue.

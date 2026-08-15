@@ -1,0 +1,30 @@
+name: Feature request
+description: Suggest a new mechanic or capability
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / motivation
+      description: What are you trying to build that the engine doesn't support today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: How might it work? If it's a reward mechanic, how would it fit the reducer-over-events model (config + `applyEvent` + `AppliedAward`)?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Existing config (badges, counters, `all`/`any` conditions) that partly covers this, and why it falls short.
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope check
+      options:
+        - label: This is a retention/engagement primitive that belongs in the core (not app-specific business logic).
+        - label: I've read the ethical-design notes and this doesn't rely on manipulative defaults.
