@@ -1,6 +1,6 @@
 {
   "name": "gamification-engine",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Event-driven gamification engine — points, XP, levels, badges, streaks, and progress trackers. Framework- and database-agnostic behind a small storage adapter.",
   "type": "module",
   "license": "MIT",
@@ -22,7 +22,7 @@
     "firestore"
   ],
   "scripts": {
-    "test": "tsx test.ts",
+    "test": "tsx skills/gamification-engine/test.ts",
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {

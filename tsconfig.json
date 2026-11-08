@@ -11,9 +11,9 @@
     "noEmit": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src", "examples", "test.ts"],
+  "include": ["skills/gamification-engine/src", "skills/gamification-engine/examples", "skills/gamification-engine/test.ts"],
   // The Firestore adapters have `firebase` / `firebase-admin` peer dependencies;
   // typecheck them after installing those. Excluded here so the default
   // `npm run typecheck` stays green without pulling in either.
-  "exclude": ["src/adapters/firestore.ts", "src/adapters/firestore-admin.ts"]
+  "exclude": ["skills/gamification-engine/src/adapters/firestore.ts", "skills/gamification-engine/src/adapters/firestore-admin.ts"]
 }

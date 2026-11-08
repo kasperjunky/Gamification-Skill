@@ -31,12 +31,12 @@ guarantees hold only if you integrate it correctly. The important ones:
   worker), never in the browser. Users must not be able to call the engine or
   write the gamification record directly — otherwise they can mint points. Make
   the stored record server-writable only (see the Firestore rules example in
-  [SKILL.md](SKILL.md#security--anti-abuse)).
+  [SKILL.md](skills/gamification-engine/SKILL.md#security--anti-abuse)).
 
 - **The storage adapter's `update` must be an atomic read-modify-write.** A plain
   `load()` then `save()` lets two concurrent emits double-grant a `once` bonus or
   lose an award. Use a transaction, or `OptimisticAdapter`'s version-guarded
-  conditional write. See [references/writing-an-adapter.md](references/writing-an-adapter.md).
+  conditional write. See [writing-an-adapter.md](skills/gamification-engine/references/writing-an-adapter.md).
 
 - **Server time is trusted by default.** The engine ignores a client-supplied
   `event.at` so a user can't fast-forward their clock to fake a streak. Do **not**

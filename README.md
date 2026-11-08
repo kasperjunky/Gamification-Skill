@@ -1,8 +1,8 @@
 # Gamification Engine
 
 A small, tested, **event-driven** engine for points, XP, levels, badges, streaks,
-and progress trackers — the common engagement/retention primitives — packaged as
-a reusable skill.
+and progress trackers — the common engagement/retention primitives — packaged as a
+reusable Claude Code **skill / plugin**.
 
 The core has **no framework or database dependency**. Your app emits domain
 events (`item.created`, `session.open`, …) and a data-only config decides the
@@ -17,6 +17,16 @@ app action ──▶ engine.emit(userId, event) ──▶ { points, xp, badges, 
               StorageAdapter (atomic read-modify-write)
 ```
 
+## Install (Claude Code)
+
+Once listed in the official directory:
+
+```
+/plugin install gamification-engine@claude-plugins-official
+```
+
+_(Directory submission is in review — see the repo's releases in the meantime.)_
+
 ## Features
 
 - **Points / XP / levels** from a configurable XP→level curve.
@@ -29,15 +39,22 @@ app action ──▶ engine.emit(userId, event) ──▶ { points, xp, badges, 
   `maxPerDay` rate limits, and `validateConfig()` that rejects broken configs at
   construction.
 
-## Quick start
+## Repository layout
+
+This repo is a Claude Code plugin. The skill itself lives under
+`skills/gamification-engine/` (its `SKILL.md`, `src/`, `references/`, `examples/`,
+`test.ts`); `.claude-plugin/plugin.json` is the plugin manifest. Repo-level files
+(README, LICENSE, CI, etc.) stay at the root.
+
+## Quick start (contributors)
 
 ```bash
 npm install
-npm test        # runs the behavior spec (tsx test.ts)
+npm test        # runs the behavior spec (skills/gamification-engine/test.ts)
 npm run typecheck
 ```
 
-Wire it into an app:
+Wire it into an app (paths relative to the skill folder, `skills/gamification-engine/`):
 
 ```ts
 import { GamificationEngine, MemoryAdapter } from './src';
@@ -55,6 +72,8 @@ in the browser, and keep the gamification record server-writable only.
 
 ## Storage adapters
 
+Import paths are relative to the skill folder (`skills/gamification-engine/`):
+
 | Adapter | Import | Use |
 | --- | --- | --- |
 | `MemoryAdapter` | `./src` | tests, local dev |
@@ -63,16 +82,16 @@ in the browser, and keep the gamification record server-writable only.
 | `AdminFirestoreAdapter` | `./src/adapters/firestore-admin` | **server-side** Firebase — Cloud Functions / Node (`firebase-admin` peer dep) |
 
 Bringing your own database is ~20 lines — see
-[references/writing-an-adapter.md](references/writing-an-adapter.md).
+[writing-an-adapter.md](skills/gamification-engine/references/writing-an-adapter.md).
 
 ## Documentation
 
-- [SKILL.md](SKILL.md) — the full skill guide (wiring, idempotency, streaks, security, ethics).
-- [references/config-schema.md](references/config-schema.md) — every config field.
-- [references/writing-an-adapter.md](references/writing-an-adapter.md) — put the engine on your database.
-- [references/ui-integration.md](references/ui-integration.md) — front-end patterns (stat pill, rewards modal, badge metadata).
-- [references/ethical-design.md](references/ethical-design.md) — dark-pattern checklist. **Read before shipping.**
-- [examples/config.example.ts](examples/config.example.ts) — a worked config covering all three feature areas.
+- [SKILL.md](skills/gamification-engine/SKILL.md) — the full skill guide (wiring, idempotency, streaks, security, ethics).
+- [config-schema.md](skills/gamification-engine/references/config-schema.md) — every config field.
+- [writing-an-adapter.md](skills/gamification-engine/references/writing-an-adapter.md) — put the engine on your database.
+- [ui-integration.md](skills/gamification-engine/references/ui-integration.md) — front-end patterns (stat pill, rewards modal, badge metadata).
+- [ethical-design.md](skills/gamification-engine/references/ethical-design.md) — dark-pattern checklist. **Read before shipping.**
+- [config.example.ts](skills/gamification-engine/examples/config.example.ts) — a worked config covering all three feature areas.
 
 ## Packaging as a skill bundle
 
@@ -83,7 +102,7 @@ packaged skill. To rebuild it after changes:
 ```bash
 # bash (needs the `zip` CLI)
 rm -f gamification-engine.skill
-mkdir -p /tmp/pkg/gamification-engine && cp -r SKILL.md src references examples test.ts /tmp/pkg/gamification-engine/
+mkdir -p /tmp/pkg/gamification-engine && cp -r skills/gamification-engine/. /tmp/pkg/gamification-engine/
 (cd /tmp/pkg && zip -r - gamification-engine) > gamification-engine.skill
 ```
 

@@ -7,7 +7,7 @@ focused library — contributions that keep it tight and well-tested are very we
 
 ```bash
 npm install        # devDeps only (typescript, tsx, @types/node)
-npm test           # runs the behavior spec (tsx test.ts)
+npm test           # runs the behavior spec (skills/gamification-engine/test.ts)
 npm run typecheck  # tsc --noEmit
 ```
 
@@ -15,9 +15,12 @@ npm run typecheck  # tsc --noEmit
 push and pull request. No build step is required; the engine is plain TypeScript
 consumed from source.
 
+The skill's source lives under **`skills/gamification-engine/`** (`src/`, `references/`,
+`examples/`, `test.ts`); the `src/...` paths below are relative to that folder.
+
 > The Firestore adapter (`src/adapters/firestore.ts`) has a `firebase` peer
 > dependency and is excluded from the default typecheck. If you change it, run
-> `npm install firebase` and `npx tsc --noEmit src/adapters/firestore.ts` locally.
+> `npm install firebase` and `npx tsc --noEmit skills/gamification-engine/src/adapters/firestore.ts` locally.
 
 ## Architecture in one minute
 
@@ -30,7 +33,7 @@ wrapper. Understanding this split is most of what you need:
 - `src/streak.ts` — timezone day-math and streak advance/reset.
 - `src/validate.ts` — static config checks (`validateConfig`).
 - `src/adapters/*` — persistence. The contract is two methods; see
-  [references/writing-an-adapter.md](references/writing-an-adapter.md).
+  [writing-an-adapter.md](skills/gamification-engine/references/writing-an-adapter.md).
 
 Two invariants to preserve:
 
@@ -58,7 +61,7 @@ surrounding code: same naming, comment density, and idioms.
 ## Ethical design
 
 This library makes it easy to build streaks and points, which slide into dark
-patterns. Please read [references/ethical-design.md](references/ethical-design.md)
+patterns. Please read [ethical-design.md](skills/gamification-engine/references/ethical-design.md)
 before adding a mechanic that pressures users (loss framing, fake urgency,
 manufactured scarcity). Contributions that add manipulative defaults will be asked
 to change.
