@@ -8,6 +8,24 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 _Nothing yet._
 
+## [0.3.1] - 2026-11-08
+
+Clears the remaining Claude Code plugin-directory policy findings (non-verified
+org rules) so the plugin can go to review.
+
+### Removed
+
+- **`package.json` + `package-lock.json`** — the directory refuses lockfile-based
+  dependency installs for non-verified orgs. Dev tooling now runs via `npx`
+  (`npx tsx …`); CI does the same.
+- **Committed `gamification-engine.skill` binary** — only text/JSON/YAML/image
+  files are allowed in the scanned tree. The `.skill` bundle is now a GitHub
+  Release asset, built on demand, not committed.
+
+### Added
+
+- **Plugin icon** (`.claude-plugin/icon.png`, 512×512) referenced from `plugin.json`.
+
 ## [0.3.0] - 2026-11-08
 
 Restructured into a proper Claude Code plugin so it meets the official plugin
@@ -81,7 +99,8 @@ Initial release.
 - **Tests:** 48 behavior checks in `test.ts` (incl. concurrency and anti-spoof),
   wired into CI.
 
-[Unreleased]: https://github.com/kasperjunky/Gamification-Skill/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/kasperjunky/Gamification-Skill/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/kasperjunky/Gamification-Skill/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/kasperjunky/Gamification-Skill/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/kasperjunky/Gamification-Skill/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/kasperjunky/Gamification-Skill/releases/tag/v0.1.0

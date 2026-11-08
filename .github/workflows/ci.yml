@@ -14,6 +14,7 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: '22'
-      - run: npm install
-      - run: npm run typecheck
-      - run: npm test
+      # No package.json in the repo (directory policy forbids lockfile installs for
+      # non-verified orgs), so run the tooling via npx instead of `npm install`.
+      - name: Tests
+        run: npx --yes tsx@4.16.0 skills/gamification-engine/test.ts

@@ -1,10 +1,11 @@
 {
   "name": "gamification-engine",
   "description": "Add gamification to a web app: points, XP, levels, badges, daily streaks, and progress trackers. Framework- and database-agnostic event-driven engine with an idempotent award ledger.",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": {
     "name": "kasperjunky"
   },
   "homepage": "https://github.com/kasperjunky/Gamification-Skill",
-  "license": "MIT"
+  "license": "MIT",
+  "icon": ".claude-plugin/icon.png"
 }

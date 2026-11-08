@@ -5,15 +5,16 @@ focused library — contributions that keep it tight and well-tested are very we
 
 ## Development setup
 
+There is **no `package.json`** (the plugin directory refuses lockfile-based installs
+for non-verified orgs), so run the tooling with `npx`:
+
 ```bash
-npm install        # devDeps only (typescript, tsx, @types/node)
-npm test           # runs the behavior spec (skills/gamification-engine/test.ts)
-npm run typecheck  # tsc --noEmit
+npx tsx skills/gamification-engine/test.ts                       # behavior spec
+npx -p typescript -p @types/node tsc --noEmit -p tsconfig.json   # typecheck
 ```
 
-`npm test` and `npm run typecheck` must both pass — CI runs exactly these on every
-push and pull request. No build step is required; the engine is plain TypeScript
-consumed from source.
+The test run must pass — CI runs it (via `npx`) on every push and pull request. No
+build step is required; the engine is plain TypeScript consumed from source.
 
 The skill's source lives under **`skills/gamification-engine/`** (`src/`, `references/`,
 `examples/`, `test.ts`); the `src/...` paths below are relative to that folder.

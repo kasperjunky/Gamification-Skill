@@ -48,10 +48,13 @@ This repo is a Claude Code plugin. The skill itself lives under
 
 ## Quick start (contributors)
 
+No install step and no `package.json` — run the tooling with `npx`:
+
 ```bash
-npm install
-npm test        # runs the behavior spec (skills/gamification-engine/test.ts)
-npm run typecheck
+# behavior spec
+npx tsx skills/gamification-engine/test.ts
+# typecheck
+npx -p typescript -p @types/node tsc --noEmit -p tsconfig.json
 ```
 
 Wire it into an app (paths relative to the skill folder, `skills/gamification-engine/`):
@@ -95,15 +98,15 @@ Bringing your own database is ~20 lines — see
 
 ## Packaging as a skill bundle
 
-`gamification-engine.skill` is a zip of the skill files under a
-`gamification-engine/` folder — a convenience snapshot for tools that ingest a
-packaged skill. To rebuild it after changes:
+A `gamification-engine.skill` zip (the skill files under a `gamification-engine/`
+folder) is attached to each [GitHub Release](https://github.com/kasperjunky/Gamification-Skill/releases)
+as a convenience download. It is **not committed to the repo** (the plugin
+directory only accepts text/JSON/YAML/image files). To build one yourself:
 
 ```bash
-# bash (needs the `zip` CLI)
-rm -f gamification-engine.skill
+# bash (needs the `zip` CLI); writes to a temp dir, not the repo
 mkdir -p /tmp/pkg/gamification-engine && cp -r skills/gamification-engine/. /tmp/pkg/gamification-engine/
-(cd /tmp/pkg && zip -r - gamification-engine) > gamification-engine.skill
+(cd /tmp/pkg && zip -r - gamification-engine) > /tmp/gamification-engine.skill
 ```
 
 ## License
