@@ -19,13 +19,16 @@ app action ──▶ engine.emit(userId, event) ──▶ { points, xp, badges, 
 
 ## Install (Claude Code)
 
-Once listed in the official directory:
+This repo is its own plugin marketplace — add it, then install:
 
 ```
-/plugin install gamification-engine@claude-plugins-official
+/plugin marketplace add kasperjunky/Gamification-Skill
+/plugin install gamification-engine@gamification-skill
 ```
 
-_(Directory submission is in review — see the repo's releases in the meantime.)_
+Claude Code will ask you to trust the source (it's third-party, not the official
+Anthropic directory). You can also vendor it directly — copy `skills/gamification-engine/`
+into your project's `.claude/skills/` (or `~/.claude/skills/` for all projects).
 
 ## Features
 

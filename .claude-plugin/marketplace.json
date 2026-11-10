@@ -1,0 +1,6 @@
+{
+  "name": "gamification-skill",
+  "description": "Gamification Engine for Claude Code — points, XP, levels, badges, daily streaks, and progress trackers. Framework- and database-agnostic.",
+  "owner": { "name": "kasperjunky" },
+  "plugins": [{ "name": "gamification-engine", "source": "./" }]
+}

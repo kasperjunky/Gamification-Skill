@@ -8,6 +8,15 @@ to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 _Nothing yet._
 
+## [0.3.2] - 2026-11-10
+
+### Added
+
+- **Self-hosted plugin marketplace** (`.claude-plugin/marketplace.json`). The repo is
+  now its own marketplace, so anyone can install directly in Claude Code:
+  `/plugin marketplace add kasperjunky/Gamification-Skill` then
+  `/plugin install gamification-engine@gamification-skill`. README updated with the flow.
+
 ## [0.3.1] - 2026-11-08
 
 Clears the remaining Claude Code plugin-directory policy findings (non-verified
@@ -99,7 +108,8 @@ Initial release.
 - **Tests:** 48 behavior checks in `test.ts` (incl. concurrency and anti-spoof),
   wired into CI.
 
-[Unreleased]: https://github.com/kasperjunky/Gamification-Skill/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/kasperjunky/Gamification-Skill/compare/v0.3.2...HEAD
+[0.3.2]: https://github.com/kasperjunky/Gamification-Skill/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/kasperjunky/Gamification-Skill/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/kasperjunky/Gamification-Skill/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/kasperjunky/Gamification-Skill/compare/v0.1.0...v0.2.0
