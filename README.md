@@ -17,6 +17,13 @@ app action ──▶ engine.emit(userId, event) ──▶ { points, xp, badges, 
               StorageAdapter (atomic read-modify-write)
 ```
 
+A rewards view powered by the engine — points, XP/level progress, a daily streak,
+and earned badges (from a real app built with it):
+
+<p align="center">
+  <img src="docs/rewards-modal.png" alt="Rewards modal: level progress bar, points, XP, a 6-day streak, and achievement badges" width="420">
+</p>
+
 ## Install (Claude Code)
 
 This repo is its own plugin marketplace — add it, then install:
@@ -29,6 +36,32 @@ This repo is its own plugin marketplace — add it, then install:
 Claude Code will ask you to trust the source (it's third-party, not the official
 Anthropic directory). You can also vendor it directly — copy `skills/gamification-engine/`
 into your project's `.claude/skills/` (or `~/.claude/skills/` for all projects).
+
+## Use in Cursor, Copilot, or any editor
+
+The engine is **plain TypeScript with zero runtime dependencies**, so it works in any
+project regardless of which AI editor you use — the Claude Code plugin is just one
+delivery mechanism.
+
+> **Note:** Cursor added a plugin system in 2.5, but it currently can't add a *custom*
+> plugin marketplace, so the `/plugin marketplace add` command above is Claude-Code-only.
+> In Cursor (or anywhere) use the engine as a library instead:
+
+```bash
+# add the engine to your project (git subtree keeps it updatable)
+git subtree add --prefix src/gamification \
+  https://github.com/kasperjunky/Gamification-Skill main --squash
+# the library lives at: src/gamification/skills/gamification-engine/src
+```
+
+Or simply copy `skills/gamification-engine/src` into your project and import from it:
+
+```ts
+import { GamificationEngine, MemoryAdapter } from './gamification/src';
+```
+
+Point your editor's AI assistant at `skills/gamification-engine/SKILL.md` and the
+`references/` folder and it has everything it needs to wire the engine into your app.
 
 ## Features
 
