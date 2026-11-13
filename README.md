@@ -17,11 +17,12 @@ app action ──▶ engine.emit(userId, event) ──▶ { points, xp, badges, 
               StorageAdapter (atomic read-modify-write)
 ```
 
-A rewards view powered by the engine — points, XP/level progress, a daily streak,
-and earned badges (from a real app built with it):
+In action — saving a recipe fires a level-up toast, then the rewards panel shows
+the new level, points, XP, streak, and a freshly unlocked badge (a real app built
+with this engine):
 
 <p align="center">
-  <img src="docs/rewards-modal.png" alt="Rewards modal: level progress bar, points, XP, a 6-day streak, and achievement badges" width="420">
+  <img src="docs/rewards-demo.gif" alt="Demo: saving a recipe triggers a 'Level up! You reached level 3' toast; the Your Rewards panel then shows level progress, points, XP, day streak, and a newly unlocked From Scratch badge" width="820">
 </p>
 
 ## Install (Claude Code)
