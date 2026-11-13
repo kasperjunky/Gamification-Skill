@@ -17,12 +17,12 @@ app action ──▶ engine.emit(userId, event) ──▶ { points, xp, badges, 
               StorageAdapter (atomic read-modify-write)
 ```
 
-In action — saving a recipe fires a level-up toast, then the rewards panel shows
-the new level, points, XP, streak, and a freshly unlocked badge (a real app built
-with this engine):
+In action — saving a recipe fires a "Badge unlocked" toast and bumps the points
+pill, then the rewards panel shows level progress, points, XP, the daily streak,
+and the badge wall (a real app built with this engine):
 
 <p align="center">
-  <img src="docs/rewards-demo.gif" alt="Demo: saving a recipe triggers a 'Level up! You reached level 3' toast; the Your Rewards panel then shows level progress, points, XP, day streak, and a newly unlocked From Scratch badge" width="820">
+  <img src="docs/rewards-demo.gif" alt="Demo: saving a recipe triggers a 'Badge unlocked: From Scratch' toast and the points pill ticks up; the Your Rewards panel then shows Sous Chef level 5 progress, 803 points, 873 XP, an 8-day streak, and unlocked badges" width="820">
 </p>
 
 ## Install (Claude Code)
