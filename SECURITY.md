@@ -5,10 +5,10 @@
 This project is pre-1.0. Security fixes are applied to the latest `0.x` release
 only.
 
-| Version | Supported |
-| ------- | --------- |
-| 0.1.x   | ✅        |
-| < 0.1   | ❌        |
+| Version        | Supported |
+| -------------- | --------- |
+| latest `0.3.x` | ✅        |
+| < 0.3          | ❌        |
 
 ## Reporting a vulnerability
 
